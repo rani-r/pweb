@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="jumbotron">
+            <h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Member Login Page</h2>
+        </div>
+    </div>
+
+{% if form.errors %}
+    <p class="bg-warning">Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        <p class="bg-danger">Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+    {% else %}
+        <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>{{ form.username.label_tag }}</label>
+         <td>{{ form.username }}</td>
+    </div>
+
+<!--<div>-->
+  <!--<td>{{ form.username.label_tag }}</td>-->
+ <!---->
+<!--</div>-->
+
+    <div class="form-group">
+        <label>{{ form.password.label_tag }}</label>
+        <td>{{ form.password }}</td>
+    </div>
+
+<div>
+  <button type="submit" class="btn btn-primary bg-info" value="login">Login</button>
+  <input type="hidden" name="next" value="{{ next }}" />
+</div>
+</form>
+
+{# Assumes you setup the password_reset view in your URLconf #}
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+{% endblock %}
